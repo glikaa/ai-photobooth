@@ -1,5 +1,5 @@
 import torch
-from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, StableDiffusionInpaintPipelineLegacy, DDIMScheduler, AutoencoderKL
+from diffusers import StableDiffusionPipeline, StableDiffusionImg2ImgPipeline, DDIMScheduler, AutoencoderKL
 from PIL import Image
 from transformers import CLIPVisionModelWithProjection
 
@@ -31,6 +31,7 @@ noise_scheduler = DDIMScheduler(
     set_alpha_to_one=False,
     steps_offset=1,
 )
+
 vae = AutoencoderKL.from_pretrained(vae_model_path).to(dtype=torch.float16)
 
 # load SD pipeline
