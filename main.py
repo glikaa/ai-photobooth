@@ -21,14 +21,4 @@ device = "cpu"
 pipe = StableDiffusionPipeline.from_pretrained(modelid, variant="fp16", torch_dtype=torch.float32, use_auth_token=auth_token) 
 pipe.to(device) 
 
-def generate(): 
-    image = pipe(prompt.get(), guidance_scale=8.5)["sample"][0].cpu().numpy() # Convert to numpy array
-    img = Image.fromarray(image)
-    img = ImageTk.PhotoImage(img)
-    lmain.configure(image=img) 
-    lmain.image = img
-
-trigger = tk.Button(master=app, height=2, width=10, text="Generate", command=generate) 
-trigger.place(x=206, y=60) 
-
 app.mainloop()

@@ -17,7 +17,7 @@ Welcome to the AI-Powered Photobooth! This project aims to create an intelligent
     - IP-Adapter  
 
 ## Google Colab
-[AI-Powered Photobooth - Google Colab](https://colab.research.google.com/drive/1xampleLinkHere)
+[AI-Powered Photobooth - Google Colab](https://colab.research.google.com/drive/)
 
 
 ## Installation
