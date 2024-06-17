@@ -1,0 +1,9 @@
+!pip install torch diffusers accelerate transformers opencv-python einops Pillow
+!git lfs install
+!pip install git+https://github.com/tencent-ailab/IP-Adapter.git
+
+# download IP-Adapter models
+!cd IP-Adapter
+!git lfs install
+!git clone https://huggingface.co/h94/IP-Adapter
+!mv IP-Adapter/models models
