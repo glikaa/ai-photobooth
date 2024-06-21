@@ -22,6 +22,7 @@ def image_grid(imgs, rows, cols):
         grid.paste(img, box=(i%cols*w, i//cols*h))
     return grid
 
+#set scheduler
 noise_scheduler = DDIMScheduler(
     num_train_timesteps=1000,
     beta_start=0.00085,

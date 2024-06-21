@@ -5,6 +5,7 @@ from PIL import Image, ImageTk, ImageDraw
 import threading
 import time
 import numpy as np
+from face_crop_plus import Cropper
 
 class CameraApp:
     def __init__(self, root):
@@ -38,21 +39,33 @@ class CameraApp:
             imgtk = ImageTk.PhotoImage(image=img)
             self.frame_label.imgtk = imgtk
             self.frame_label.configure(image=imgtk)
+        else:
+            print("Failed to capture frame.")
         self.root.after(10, self.update_frame)
 
     def add_overlay(self, frame):
         pil_img = Image.fromarray(frame)
         draw = ImageDraw.Draw(pil_img)
 
-        # Example rectangle in frame, replace with human silhouette
+        # Dimensions of the image
         width, height = pil_img.size
-        left = width // 4
-        top = height // 4
-        right = 3 * width // 4
-        bottom = 3 * height // 4
-        draw.rectangle([left, top, right, bottom], outline="red", width=5)
+
+        # Coordinates for the oval (circle)
+        center_x = width // 2
+        center_y = height // 2
+        radius = min(width, height) // 4  # Radius of the circle
+
+        # Bounding box for the oval
+        left = center_x - radius
+        top = center_y - radius
+        right = center_x + radius
+        bottom = center_y + radius
+
+        # Draw oval
+        draw.ellipse([left, top, right, bottom], outline="red", width=5)
 
         return np.array(pil_img)
+
     
     def start_countdown(self):
         self.capture_button.config(state=tk.DISABLED)
