@@ -9,7 +9,7 @@ from camera.cameraApp import CameraApp
 
 # create python_app
 app = tk.Tk()
-app.geometry("532x632")
+app.geometry("670x600")
 app.title("AI-Photoboot Dev") 
 
 camera_app = CameraApp(app)
