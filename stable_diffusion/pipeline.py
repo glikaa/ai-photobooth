@@ -6,9 +6,10 @@ from transformers import CLIPVisionModelWithProjection
 from os.path import join, dirname, abspath
 
 #full face
-#from ip_adapter import IPAdapterFull
+from ip_adapter import IPAdapterFull
 
 def sd_process(file):
+    try:    
         #folder for results
         OUTPUT_DIR = join(dirname(abspath(__file__)), "generations")
 
@@ -57,7 +58,7 @@ def sd_process(file):
         images = ip_model.generate(
                 prompt="astronaut, portrait, high quality",
                 negative_prompt="deformed iris, deformed pupils, semi-realistic, text, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
-                pil_image=img,
+                pil_image=file,
                 num_samples=4,
                 guidance_scale=12,
                 num_inference_steps=50,
@@ -70,3 +71,5 @@ def sd_process(file):
                 image.save(save_path)
                 print(f"Generated image saved to {save_path}")
         
+    except Exception as e:
+          print(f"Error: {e}")
