@@ -9,6 +9,7 @@ from os.path import join, dirname, abspath
 from ip_adapter import IPAdapterFull
 
 def sd_process(file):
+    try:    
         #folder for results
         OUTPUT_DIR = join(dirname(abspath(__file__)), "generations")
 
@@ -18,13 +19,14 @@ def sd_process(file):
         file.show()
         print(f"Image '{file}' loaded successfully.")
 
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         
         #set models
         base_model_path = "SG161222/Realistic_Vision_V4.0_noVAE"
         vae_model_path = "stabilityai/sd-vae-ft-mse"
-        ip_ckpt = "models/ip-adapter-plus-face_sd15.bin"
+        ip_ckpt = os.path.join(base_dir, "models", "ip-adapter-plus-face_sd15.bin")
         device = "cuda"
-        image_encoder_path = "models/image_encoder"
+        image_encoder_path = os.path.join(base_dir, "models", "image_encoder")
 
         #set scheduler
         noise_scheduler = DDIMScheduler(
@@ -52,11 +54,13 @@ def sd_process(file):
         #set IP adapter
         ip_model = IPAdapterFull(pipe, image_encoder_path, ip_ckpt, device, num_tokens=257)
 
+        print("Generating images...")
+
         #generation 
         images = ip_model.generate(
                 prompt="astronaut, portrait, high quality",
                 negative_prompt="deformed iris, deformed pupils, semi-realistic, text, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
-                pil_image=img,
+                pil_image=file,
                 num_samples=4,
                 guidance_scale=12,
                 num_inference_steps=50,
@@ -69,3 +73,5 @@ def sd_process(file):
                 image.save(save_path)
                 print(f"Generated image saved to {save_path}")
         
+    except Exception as e:
+          print(f"Error: {e}")
