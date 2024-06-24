@@ -6,7 +6,7 @@ from transformers import CLIPVisionModelWithProjection
 from os.path import join, dirname, abspath
 
 #full face
-#from ip_adapter import IPAdapterFull
+from ip_adapter import IPAdapterFull
 
 def sd_process(file):
         #folder for results
@@ -18,7 +18,7 @@ def sd_process(file):
         file.show()
         print(f"Image '{file}' loaded successfully.")
 
-        """
+        
         #set models
         base_model_path = "SG161222/Realistic_Vision_V4.0_noVAE"
         vae_model_path = "stabilityai/sd-vae-ft-mse"
@@ -64,31 +64,8 @@ def sd_process(file):
         )
 
         #save image to folder 
-            for i, image in enumerate(images):
-        save_path = os.path.join(OUTPUT_DIR, f"generated_image_{i}.jpg")
-        image.save(save_path)
-        print(f"Generated image saved to {save_path}")
-        """
-
-"""
-#set image from crop-folder to use as input 
-project_folder = os.path.dirname(os.path.dirname(__file__))
-folder_path = os.path.join(project_folder, "camera", "crop")
-input_image = "captured_photo.jpg"
-file_path = os.path.join(folder_path, input_image)
-
-# Check if the file exists
-if os.path.exists(file_path):
-    # Open the image using PIL.Image
-    img = Image.open(file_path)
-    print(f"Image '{input_image}' loaded successfully.")
-
-    # Convert the image to RGB
-    img_rgb = img.convert('RGB')
-    print(f"Image '{input_image}' converted to RGB.")
-
-    img_rgb.show()  # This will open the image using the default image viewer
-
-else:
-    print(f"File '{input_image}' does not exist in folder '{folder_path}'.")
-"""
+        for i, image in enumerate(images):
+                save_path = os.path.join(OUTPUT_DIR, f"generated_image_{i}.jpg")
+                image.save(save_path)
+                print(f"Generated image saved to {save_path}")
+        
