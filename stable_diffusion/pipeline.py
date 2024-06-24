@@ -54,6 +54,8 @@ def sd_process(file):
         #set IP adapter
         ip_model = IPAdapterFull(pipe, image_encoder_path, ip_ckpt, device, num_tokens=257)
 
+        print("Generating images...")
+
         #generation 
         images = ip_model.generate(
                 prompt="astronaut, portrait, high quality",
