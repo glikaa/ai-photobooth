@@ -6,7 +6,7 @@ from transformers import CLIPVisionModelWithProjection
 from os.path import join, dirname, abspath
 
 #full face
-from ip_adapter import IPAdapterFull
+#from ip_adapter import IPAdapterFull
 
 def sd_process(file):
         #folder for results
@@ -18,13 +18,14 @@ def sd_process(file):
         file.show()
         print(f"Image '{file}' loaded successfully.")
 
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         
         #set models
         base_model_path = "SG161222/Realistic_Vision_V4.0_noVAE"
         vae_model_path = "stabilityai/sd-vae-ft-mse"
-        ip_ckpt = "models/ip-adapter-plus-face_sd15.bin"
+        ip_ckpt = os.path.join(base_dir, "models", "ip-adapter-plus-face_sd15.bin")
         device = "cuda"
-        image_encoder_path = "models/image_encoder"
+        image_encoder_path = os.path.join(base_dir, "models", "image_encoder")
 
         #set scheduler
         noise_scheduler = DDIMScheduler(
