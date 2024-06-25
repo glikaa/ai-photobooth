@@ -92,7 +92,7 @@ class CameraApp:
         cropped_photo_path = join(OUTPUT_DIR, "captured_photo.jpg")
         if os.path.exists(cropped_photo_path):
             img = Image.open(cropped_photo_path)
-            img = img.resize((640, 480), Image.ANTIALIAS)  # Resize image to fit the window
+            img = img.resize((640, 480))  # Resize image to fit the window
             img_tk = ImageTk.PhotoImage(img)
             self.frame_label.imgtk = img_tk
             self.frame_label.configure(image=img_tk)

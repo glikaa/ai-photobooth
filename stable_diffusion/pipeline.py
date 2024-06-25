@@ -22,9 +22,9 @@ def sd_process(file):
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         
         #set models
-        base_model_path = "SG161222/Realistic_Vision_V4.0_noVAE"
-        vae_model_path = "stabilityai/sd-vae-ft-mse"
-        ip_ckpt = os.path.join(base_dir, "models", "ip-adapter-plus-face_sd15.bin")
+        base_model_path =  os.path.join(base_dir, "models", "models--SG161222--Realistic_Vision_V4.0_noVAE")
+        vae_model_path = os.path.join(base_dir, "models", "models--stabilityai--sd-vae-ft-mse")
+        ip_ckpt = os.path.join(base_dir, "models", "ip-adapter-full-face_sd15.bin")
         device = "cuda"
         image_encoder_path = os.path.join(base_dir, "models", "image_encoder")
 
@@ -50,7 +50,7 @@ def sd_process(file):
         feature_extractor=None,
         safety_checker=None
         )
-
+        print("Trying to load model...")
         #set IP adapter
         ip_model = IPAdapterFull(pipe, image_encoder_path, ip_ckpt, device, num_tokens=257)
 
