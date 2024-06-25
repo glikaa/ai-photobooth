@@ -24,5 +24,6 @@ Welcome to the AI-Powered Photobooth! This project aims to create an intelligent
 ## Installation
 ```bash
 git clone https://github.com/glikaa/ai-photobooth.git
+chmod +x setup.sh
 cd ai-photobooth
 pip install -r requirements.txt
