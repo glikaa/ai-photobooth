@@ -1,7 +1,7 @@
 # AI-Powered Photobooth
 
 ## Overview
-Welcome to the AI-Powered Photobooth! This project aims to create an intelligent photobooth with features like automatic image generation with stable diffusion, specified on a theme. 
+Welcome to the AI-Powered Photobooth! This project aims to create an intelligent photobooth with features of automatic image generation with stable diffusion, specified on a theme using IP-Adapters.
 
 ## Project Status
 **Current Status: In Development**
