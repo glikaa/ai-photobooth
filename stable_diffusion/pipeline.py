@@ -16,7 +16,7 @@ def sd_process(file):
         if not os.path.exists(OUTPUT_DIR):
                 os.makedirs(OUTPUT_DIR)
         
-        file.show()
+        #file.show()
         print(f"Image '{file}' loaded successfully.")
 
         base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -58,7 +58,7 @@ def sd_process(file):
 
         #generation 
         images = ip_model.generate(
-                prompt="astronaut, portrait, high quality",
+                prompt="A sepia-toned vintage photograph of a young student sitting casually on an ornate chair. He is wearing a formal suit with a graduation cap and has a relaxed, confident posture. The man is smoking a pipe, exuding a scholarly and nonchalant vibe. The setting is a simple studio with a plain backdrop and a curtain on one side, adding to the old-fashioned, antique aesthetic.",
                 negative_prompt="deformed iris, deformed pupils, semi-realistic, text, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
                 pil_image=file,
                 num_samples=4,
@@ -72,6 +72,6 @@ def sd_process(file):
                 save_path = os.path.join(OUTPUT_DIR, f"generated_image_{i}.jpg")
                 image.save(save_path)
                 print(f"Generated image saved to {save_path}")
-        
+        return images
     except Exception as e:
           print(f"Error: {e}")

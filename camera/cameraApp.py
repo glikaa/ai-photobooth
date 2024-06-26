@@ -13,6 +13,7 @@ from stable_diffusion.pipeline import sd_process
 
 INPUT_DIR = join(dirname(abspath(__file__)), "images")
 OUTPUT_DIR = join(dirname(abspath(__file__)), "crop")
+NUMBER_OF_RESULTS = 4
 
 if not os.path.exists(INPUT_DIR):
     os.makedirs(INPUT_DIR)
@@ -44,6 +45,12 @@ class CameraApp:
         self.countdown_label = ttk.Label(self.root, text="", font=("Helvetica", 20))
         self.countdown_label.grid(row=2, column=0, columnspan=2, pady=10)
 
+        self.result_labels = []
+        for i in range(NUMBER_OF_RESULTS):
+            lab = ttk.Label(self.root)
+            lab.grid(row=5, column=i, columnspan=1, pady=0)
+            self.result_labels.append(lab)
+        
         self.update_frame()
 
     def update_frame(self):
@@ -100,6 +107,12 @@ class CameraApp:
         else:
             print(f"Cropped photo {cropped_photo_path} not found.")
     
+    def display_result(self,images):
+        for i, image in enumerate(images):
+            img_tk = ImageTk.PhotoImage(image)
+            self.result_labels[i].imgtk = img_tk
+            self.result_labels[i].configure(image=img_tk)
+
     def process_photo(self):
         cropped_photo_path = join(OUTPUT_DIR, "captured_photo.jpg")
         if os.path.exists(cropped_photo_path):
@@ -107,7 +120,8 @@ class CameraApp:
             img_rgb = img.convert("RGB")
 
             # Process the image using the Stable Diffusion pipeline
-            sd_process(img_rgb)
+            images = sd_process(img_rgb)
+            self.display_result(images)
             print(f"Processing {cropped_photo_path} with Stable Diffusion.")
         else:
             print(f"Cropped photo {cropped_photo_path} not found.")
