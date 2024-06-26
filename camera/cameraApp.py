@@ -13,6 +13,10 @@ from stable_diffusion.pipeline import sd_process
 
 INPUT_DIR = join(dirname(abspath(__file__)), "images")
 OUTPUT_DIR = join(dirname(abspath(__file__)), "crop")
+LOGO_PATH = join(dirname(abspath(__file__)), "data", "HochschuleEsslingen_Logo_Informatik_4c_DE.jpg")
+SPRUCH_PATH = join(dirname(abspath(__file__)), "data", "Spruch.png")
+LOGO_SIZE = 0.6
+CLAIM_SIZE = 0.5
 NUMBER_OF_RESULTS = 4
 
 if not os.path.exists(INPUT_DIR):
@@ -34,23 +38,37 @@ class CameraApp:
             exit()
 
         self.frame_label = ttk.Label(self.root)
-        self.frame_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+        self.frame_label.grid(row=0, column=0, columnspan=2, padx=0, pady=5)
+
+        self.crop_label = ttk.Label(self.root)
+        self.crop_label.grid(row=0, column=2, columnspan=1, padx=0, pady=5)
 
         self.capture_button = ttk.Button(self.root, text="take picture", command=self.start_countdown)
-        self.capture_button.grid(row=1, column=0, columnspan=2, pady=10)
+        self.capture_button.grid(row=1, column=0, columnspan=2, pady=5)
 
         self.process_button = ttk.Button(self.root, text="start generation", command=self.process_photo)
-        self.process_button.grid(row=3, column=0, columnspan=2, pady=10)
+        self.process_button.grid(row=1, column=1, columnspan=2, pady=5)
 
         self.countdown_label = ttk.Label(self.root, text="", font=("Helvetica", 20))
-        self.countdown_label.grid(row=2, column=0, columnspan=2, pady=10)
+        self.countdown_label.grid(row=1, column=2, columnspan=2, pady=5)
 
         self.result_labels = []
         for i in range(NUMBER_OF_RESULTS):
             lab = ttk.Label(self.root)
-            lab.grid(row=5, column=i, columnspan=1, pady=0)
+            lab.grid(row=2, column=i, columnspan=1, pady=0)
             self.result_labels.append(lab)
-        
+        # load logo
+        self.logo = Image.open(LOGO_PATH)
+        self.logo = self.logo.resize((int(320*LOGO_SIZE), int(240*LOGO_SIZE)))
+        self.logo = self.logo.convert("RGBA")
+
+        # Create an alpha layer for the logo
+        alpha = Image.new("L", self.logo.size, 255)
+        self.logo.putalpha(alpha)
+        # load claim
+        self.claim = Image.open(SPRUCH_PATH)
+        self.claim = self.claim.resize((int(self.claim.size[0]*CLAIM_SIZE), int(self.claim.size[1]*CLAIM_SIZE)))
+
         self.update_frame()
 
     def update_frame(self):
@@ -82,8 +100,14 @@ class CameraApp:
             if ret:
                 #save photo
                 original_filename = "captured_photo.jpg"
-                cv2.imwrite(join(INPUT_DIR, original_filename), frame)
-                print(f"Photo saved as {original_filename}")
+                input_file = join(INPUT_DIR, original_filename)
+                if os.path.exists(input_file):
+                    os.remove(input_file)
+                output_file = join(OUTPUT_DIR, original_filename)
+                if os.path.exists(output_file):
+                    os.remove(output_file)
+                success = cv2.imwrite(join(INPUT_DIR, original_filename), frame)
+                print(f"Photo saved as {original_filename} {success}")
                             
                 # face_crop_plus to get image from folder and save to different folder
                 crop_img = Cropper(face_factor=0.8, strategy="largest", output_size=(512, 512))
@@ -101,8 +125,8 @@ class CameraApp:
             img = Image.open(cropped_photo_path)
             img = img.resize((640, 480))  # Resize image to fit the window
             img_tk = ImageTk.PhotoImage(img)
-            self.frame_label.imgtk = img_tk
-            self.frame_label.configure(image=img_tk)
+            self.crop_label.imgtk = img_tk
+            self.crop_label.configure(image=img_tk)
             print(f"Displayed {cropped_photo_path}")
         else:
             print(f"Cropped photo {cropped_photo_path} not found.")
@@ -113,6 +137,21 @@ class CameraApp:
             self.result_labels[i].imgtk = img_tk
             self.result_labels[i].configure(image=img_tk)
 
+    def apply_logo(self,images):
+
+        for image in images:
+            # Get dimensions of the main image and the logo
+            image_width, image_height = image.size
+            logo_width, logo_height = self.logo.size
+
+            # Calculate the position for the logo to be placed at the lower right corner
+            position = (image_width - logo_width, image_height - logo_height)
+
+            # Paste the logo onto the main image
+            image.paste(self.logo, position, self.logo)
+            image.paste(self.claim, (0,0), self.claim)
+        return images
+    
     def process_photo(self):
         cropped_photo_path = join(OUTPUT_DIR, "captured_photo.jpg")
         if os.path.exists(cropped_photo_path):
@@ -121,6 +160,7 @@ class CameraApp:
 
             # Process the image using the Stable Diffusion pipeline
             images = sd_process(img_rgb)
+            images = self.apply_logo(images)
             self.display_result(images)
             print(f"Processing {cropped_photo_path} with Stable Diffusion.")
         else:
