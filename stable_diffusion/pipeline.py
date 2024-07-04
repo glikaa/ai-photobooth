@@ -67,11 +67,7 @@ def sd_process(file):
                 scale=0.75
         )
 
-        #save image to folder 
-        for i, image in enumerate(images):
-                save_path = os.path.join(OUTPUT_DIR, f"generated_image_{i}.jpg")
-                image.save(save_path)
-                print(f"Generated image saved to {save_path}")
+       
         return images
     except Exception as e:
           print(f"Error: {e}")

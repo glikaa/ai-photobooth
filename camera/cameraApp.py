@@ -7,12 +7,14 @@ import os
 import numpy as np
 from os.path import join, dirname, abspath
 from PIL import Image, ImageTk
+from uuid import uuid4
 
 from face_crop_plus import Cropper
 from stable_diffusion.pipeline import sd_process
 
 INPUT_DIR = join(dirname(abspath(__file__)), "images")
 OUTPUT_DIR = join(dirname(abspath(__file__)), "crop")
+RESULT_DIR = join(dirname(abspath(__file__)), "..", "stable_diffusion", "generations")
 LOGO_PATH = join(dirname(abspath(__file__)), "data", "HochschuleEsslingen_Logo_Informatik_4c_DE.jpg")
 SPRUCH_PATH = join(dirname(abspath(__file__)), "data", "Spruch.png")
 LOGO_SIZE = 0.6
@@ -162,10 +164,17 @@ class CameraApp:
             images = sd_process(img_rgb)
             images = self.apply_logo(images)
             self.display_result(images)
+            self.save_result(images)
             print(f"Processing {cropped_photo_path} with Stable Diffusion.")
         else:
             print(f"Cropped photo {cropped_photo_path} not found.")
-    
+    def save_result(self,images):
+        #save image to folder 
+        uid = uuid4()
+        for i, image in enumerate(images):
+                save_path = os.path.join(RESULT_DIR, f"{uid}_{i}.jpg")
+                image.save(save_path)
+                print(f"Generated image saved to {save_path}")
     def on_closing(self):
         self.video_stream.release()
         self.root.destroy()
