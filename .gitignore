@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.pyc
 # Distribution / packaging
 .Python
 env/
@@ -26,7 +26,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
+models/
 # PyInstaller
 *.manifest
 *.spec
@@ -50,3 +50,8 @@ venv/
 
 # VS Code
 .vscode/
+stable_diffusion/generations/
+stable_diffusion/tests/
+camera/crop/
+camera/images/
+stable_diffusion/__pycache__/pipeline.cpython-312.pyc

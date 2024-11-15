@@ -16,9 +16,9 @@ INPUT_DIR = join(dirname(abspath(__file__)), "images")
 OUTPUT_DIR = join(dirname(abspath(__file__)), "crop")
 RESULT_DIR = join(dirname(abspath(__file__)), "..", "stable_diffusion", "generations")
 LOGO_PATH = join(dirname(abspath(__file__)), "data", "HochschuleEsslingen_Logo_Informatik_4c_DE.jpg")
-SPRUCH_PATH = join(dirname(abspath(__file__)), "data", "Spruch.png")
+SPRUCH_PATH = join(dirname(abspath(__file__)), "data", "Spruch_2.png")
 LOGO_SIZE = 0.6
-CLAIM_SIZE = 0.5
+CLAIM_SIZE = 1
 NUMBER_OF_RESULTS = 4
 
 if not os.path.exists(INPUT_DIR):
